@@ -15,33 +15,38 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.Locale;
 
 import static com.example.tic_tac_toe.lib.Utils.showInfoDialog;
 
 public class MainActivity extends AppCompatActivity {
     private Snackbar mSnackBar;
     private TicTacToe mGame;
+    private TextView mTvStatusBarCurrentPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mTvStatusBarCurrentPlayer = findViewById(R.id.tv_status_current_player);
+        setupFAB();
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mSnackBar =
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.welcome),
                         Snackbar.LENGTH_LONG);
-        mGame = new TicTacToe();
+        startFirstGame();
 
     }
+
+    private void startFirstGame() {
+        mGame = new TicTacToe();
+        updateUI();
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -59,6 +64,17 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupFAB() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showInfoDialog(MainActivity.this,
+                        getString(R.string.info_title), mGame.getRules());
+            }
+        });
     }
 
     private void showSettings() {
@@ -83,18 +99,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+        dismissSnackBarIfShown();
+        mTvStatusBarCurrentPlayer.setText(
+                String.format(Locale.getDefault(), "%s: %s",
+                        getString(R.string.current_player),
+                        "X"));
     }
 
     private void showAbout() {
         dismissSnackBarIfShown();
         showInfoDialog(MainActivity.this, "About Tic Tac Toe",
-                "Try to get three O's or X's in a row!");
+                "Game created by:\n" +
+                        "Ester Agishtein\n" +
+                        "Mindy Gottlieb\n" +
+                        "Shoshana Weinfeld\n" +
+                        "for Android programming term project.");
     }
+
     private void dismissSnackBarIfShown() {
         if (mSnackBar.isShown()) {
             mSnackBar.dismiss();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

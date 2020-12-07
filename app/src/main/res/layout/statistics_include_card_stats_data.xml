@@ -34,7 +34,7 @@
         style="@style/TextViewStatistics.SecondaryTextColor.Bold"
         android:layout_marginEnd="@dimen/default_activity_margin"
         android:layout_marginRight="@dimen/default_activity_margin"
-        android:text="@string/player_number"
+        android:text="@string/player"
         app:layout_constraintEnd_toStartOf="@+id/tv_label_header_wins"
         app:layout_constraintTop_toTopOf="@+id/tv_label_header_wins" />
 
@@ -59,7 +59,7 @@
     <TextView
         android:id="@+id/tv_label_player1_number"
         style="@style/TextViewStatistics.SecondaryTextColor"
-        android:text="@string/one"
+        android:text="@string/playerX"
         app:layout_constraintEnd_toEndOf="@+id/tv_label_header_player"
         app:layout_constraintStart_toStartOf="@+id/tv_label_header_player"
         app:layout_constraintTop_toTopOf="@+id/tv_data_player1_wins" />
@@ -84,7 +84,7 @@
     <TextView
         android:id="@+id/tv_label_player2_number"
         style="@style/TextViewStatistics.SecondaryTextColor"
-        android:text="@string/two"
+        android:text="@string/playerO"
         app:layout_constraintEnd_toEndOf="@+id/tv_label_player1_number"
         app:layout_constraintTop_toTopOf="@+id/tv_data_player2_wins" />
 

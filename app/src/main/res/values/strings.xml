@@ -22,15 +22,18 @@
     <string name="auto_save_title">Auto-Save Game on Exit</string>
     <string name="fab">FAB</string>
 
-    <string name="reset_statistics">Reset Statistic</string>
+    <string name="reset_statistics">Reset Statistics</string>
     <string name="title_activity_statistics">Statistics</string>
     <string name="games_played">Games Played</string>
-    <string name="player_number">Player Number</string>
+    <string name="player">Player</string>
     <string name="games_won">Games Won</string>
-    <string name="percent_won">Percent One</string>
-    <string name="one">One</string>
-    <string name="two">Two</string>
+    <string name="percent_won">Percent Won</string>
+    <string name="playerX">X</string>
+    <string name="playerO">O</string>
     <string name="display_header">Display Header</string>
     <string name="game_header">Game Header</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="banner_text">Click on an empty box to fill with your symbol</string>
+    <string name="info_title">How to play:</string>
+    <string name="current_player">Current Player</string>
 </resources>

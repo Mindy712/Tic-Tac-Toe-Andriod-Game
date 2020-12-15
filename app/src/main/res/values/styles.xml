@@ -36,4 +36,19 @@
     <style name="TextViewStatistics.SecondaryTextColor.Bold">
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="board_button_style">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">@dimen/default_activity_margin</item>
+        <item name="android:textSize">60sp</item>
+        <item name="android:onClick">make_move</item>
+    </style>
+
+    <style name="board_row_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
 </resources>

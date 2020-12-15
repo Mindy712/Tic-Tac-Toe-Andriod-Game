@@ -6,4 +6,5 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <include layout="@layout/main_include_instruction_bar" />
+    <include layout="@layout/main_include_board"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

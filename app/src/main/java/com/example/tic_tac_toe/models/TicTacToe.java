@@ -1,138 +1,140 @@
 package com.example.tic_tac_toe.models;
 
+import android.widget.Button;
+
 import com.google.gson.Gson;
 
 import java.util.Arrays;
 
 public class TicTacToe
 {
-    private final static int sDEFAULT_PILE_START = 13, sPLAYER_COUNT = 2;
+    private Button[][] board = new Button[3][3];
+    private boolean player;
+    private boolean gameEnd = false;
     private int mNumberOfGamesPlayed = 0;
     private final int[] mArrayPlayerWinCount;
 
-    public final static int sMIN_PICK = 1;
-    public final static int sMAX_PICK = 3;
+    //TODO: Saved state
+    public TicTacToe(Button[][] state)
+    {
+        //TODO: pass in old array
+        mArrayPlayerWinCount = new int[2];
+    }
 
-    private final int mPileStart;
-    private int mPileCurrent;
-    private boolean mFirstPlayerTurn, mWinnerIsLastPlayerToPick; //false by default
 
     public TicTacToe()
     {
-        this (sDEFAULT_PILE_START, false);
-    }
-
-    public TicTacToe(int pileSize)
-    {
-        this (pileSize, false);
-    }
-
-    public TicTacToe(int pileSize, boolean winnerIsLastPlayerToPick)
-    {
-        mPileStart = pileSize;
-        mWinnerIsLastPlayerToPick = winnerIsLastPlayerToPick;
-        mArrayPlayerWinCount = new int[sPLAYER_COUNT];
+        mArrayPlayerWinCount = new int[2];
         startGame ();
     }
 
     public void startGame ()
     {
-        mPileCurrent = mPileStart;
-        mFirstPlayerTurn = true;
+        player = true;
         mNumberOfGamesPlayed++;
     }
 
-    public void takeTurn (int amount)
+    public void takeTurn (Button button)
     {
-        if (!isGameOver ()) {
-            tryToTakeTurnWith (amount);
-            updateGameWinStatisticsIfGameHasJustEnded();
-        }
-        else {
-            throw new IllegalStateException ("May not take a turn while the game is over.");
+        while(!gameEnd) {
+            char symbol;
+            if(player) {
+                symbol = 'X';
+            } else {
+                symbol = 'O';
+            }
+
+            //TODO:get user's move in terms of row and col
+            int row = 0; //place holder
+            int col = 0; //place holder
+            while (!board[row][col].getText().equals("")) {
+                //TODO:get user's move in terms of row and col
+                row = 0; //place holder
+                col = 0; //place holder
+            }
+            board[row][col].setText(symbol);
+
+            //check if player won
+            if(playerWon(symbol)) {
+                //TODO:message of winner
+                gameEnd = true;
+            } else if (boardFull()){
+                //TODO:message of cats game
+                gameEnd = true;
+            } else {
+                player = !player;
+            }
+
         }
     }
 
+    private boolean boardFull() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if(board[i][j].getText().equals("")) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean playerWon(char symbol) {
+        for(int i = 0; i < 3; i++) {
+            if(board[i][0].getText().equals(symbol) && board[i][1].getText().equals(symbol) && board[i][2].getText().equals(symbol)) {
+                return true;
+            }
+        }
+        for(int j = 0; j < 3; j++) {
+            if(board[0][j].getText().equals(symbol) && board[1][j].getText().equals(symbol) && board[2][j].getText().equals(symbol)) {
+                return true;
+            }
+        }
+        if(board[0][0].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[2][2].getText().equals(symbol)) {
+            return true;
+        }
+        if(board[2][0].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[0][2].getText().equals(symbol)) {
+            return true;
+        }
+
+        return false;
+    }
+
+
     private void updateGameWinStatisticsIfGameHasJustEnded() {
-        if (isGameOver())
+        if (gameEnd)
             mArrayPlayerWinCount[getWinningPlayerNumber()-1]++;  // player 1 or 2 == element 0 or 1
     }
 
-    private void tryToTakeTurnWith (int amount)
-    {
-        if (isInMinToMaxRange (amount) && isNotGreaterThanPileCurrent (amount)) {
-            takeValidTurn (amount);
-        }
-        else {
-            throw new IllegalArgumentException
-                    ("Pick Amount must be: " + sMIN_PICK + " - " + sMAX_PICK +
-                            " and up to number of remaining stones in the pile.");
-        }
-    }
-
-    private boolean isNotGreaterThanPileCurrent (int amount)
-    {
-        return amount <= mPileCurrent;
-    }
-
-    private boolean isInMinToMaxRange (int amount)
-    {
-        return amount >= sMIN_PICK && amount <= sMAX_PICK;
-    }
-
-    private void takeValidTurn (int amount)
-    {
-        // decrement pile
-        mPileCurrent -= amount;
-
-        // switch player turns if not Game Over
-        if (!isGameOver ())
-            mFirstPlayerTurn = !mFirstPlayerTurn;
-    }
-
-    public boolean isGameOver ()
-    {
-        return mPileCurrent <= 0;
-    }
-
-    public boolean isWinnerIsLastPlayerToPick ()
-    {
-        return mWinnerIsLastPlayerToPick;
-    }
 
     public int getNumberOfWinsForPlayer (int playerNumber)
     {
-        if (playerNumber < 1 || playerNumber > sPLAYER_COUNT)
+        if (playerNumber < 1 || playerNumber > 2)
             throw new IllegalArgumentException("Player number must be between 1 and "
-                    + sPLAYER_COUNT + ".");
+                    + 2 + ".");
         return mArrayPlayerWinCount[playerNumber-1];
     }
 
     public void resetStatistics ()
     {
-        mNumberOfGamesPlayed= isGameOver() ? 0 : 1;
+        mNumberOfGamesPlayed= gameEnd ? 0 : 1;
         Arrays.fill(mArrayPlayerWinCount, 0);
-    }
-
-    public void setWinnerIsLastPlayerToPick (boolean winnerIsLastPlayerToPick)
-    {
-        mWinnerIsLastPlayerToPick = winnerIsLastPlayerToPick;
     }
 
     public int getWinningPlayerNumberIfGameOver()
     {
-        if (!isGameOver())
+        if (!gameEnd)
             throw new IllegalStateException("No winner yet; the game is still ongoing.");
         return getWinningPlayerNumber();
     }
 
     private int getWinningPlayerNumber() {
-        return (mWinnerIsLastPlayerToPick == mFirstPlayerTurn) ? 1 : 2;
+        return (player) ? 1 : 2;
     }
 
     public int getCurrentPlayerNumber ()
     {
-        return mFirstPlayerTurn ? 1 : 2;
+        return player ? 1 : 2;
     }
 
     public int getNumberOfGamesPlayed ()
@@ -140,23 +142,9 @@ public class TicTacToe
         return mNumberOfGamesPlayed;
     }
 
-    public int getStonesRemaining ()
-    {
-        return mPileCurrent;
-    }
-
-    public String getRules ()
-    {
-        return "13 Stones is a simple game. Game play begins with a pile of " +
-                mPileStart + " stones.\n\n" +
-                "Players each take one turn per round removing " +
-                sMIN_PICK + "-" + sMAX_PICK + " stones per turn.\n\n" +
-                "By default, the player that empties the pile loses the game.";
-    }
-
     /**
      * Reverses the game object's serialization as a String
-     * back to a ThirteenStones game object
+     * back to a TicTacToe game object
      *
      * @param json The serialized String of the game object
      * @return The game object

@@ -1,10 +1,8 @@
 package com.example.tic_tac_toe.models;
 
 import android.util.Pair;
-import android.view.View;
 import android.widget.Button;
 
-import com.example.tic_tac_toe.R;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
@@ -15,7 +13,7 @@ public class TicTacToe
     private Button[][] mBtnBoard;
 
     private boolean player;
-    private boolean gameEnd = false;
+//    private boolean gameEnd = false;
     private int mNumberOfGamesPlayed = 0;
     private final int[] mArrayPlayerWinCount;
 
@@ -93,59 +91,40 @@ public class TicTacToe
 //        }
 //    }
 
-    public void takeTurnGame (Button button)
+    public boolean canTakeTurn (Pair<Integer, Integer> pairRowCol)
     {
-        // get row and column of current clicked button
-        Pair<Integer, Integer> pairRowCol = getClickedRowCol(button);
-
         int row = pairRowCol.first;
         int col = pairRowCol.second;
 
         if (row==-1 || col==-1)
             throw new IllegalArgumentException("Unknown Space Clicked");
 
-        while(!gameEnd) {
-            char symbol;
-            if(player) {
-                symbol = 'X';
-            } else {
-                symbol = 'O';
-            }
+        if(board[row][col] != 'X' || board[row][col] != 'O') {
+            board[row][col] = getCurrentPlayerSymbol();
 
-            if(button.getText().equals("")) {
-                button.setText(Character.toString(symbol));
-                board[row][col] = symbol;
-
-                //check if player won - only on valid click
-                if(playerWon(symbol)) {
-                //TODO:message of winner
-                    gameEnd = true;
-                } else if (boardFull()){
-                //TODO:message of cats game
-                    gameEnd = true;
-                } else {
-                    player = !player;
-                }
-
+            if (!isGameOver()) {
+                player = !player;
             }
-            else{
-                System.out.println("don't set");
-            }
+            return true;
         }
+        else{
+            System.out.println("don't set");
+        }
+        return false;
     }
 
-    private Pair<Integer, Integer> getClickedRowCol(Button button) {
-        for (int row = 0; row < mBtnBoard.length; row++) {
-            for (int col = 0; col < mBtnBoard[row].length; col++) {
-                if (button == mBtnBoard[row][col])
-                    return new Pair<>(row,col);
-            }
-        }
-        return new Pair<>(-1,-1);
+    public char getCurrentPlayerSymbol() {
+        return player ? 'X' : 'O';
     }
 
-    public String getCurrentPlayer() {
-        return player ? "X" : "O";
+    public boolean isGameOver() {
+        if (playerWon(getCurrentPlayerSymbol())) {
+            return true;
+        }
+        else if (boardFull()) {
+            return true;
+        }
+        return false;
     }
 
     private boolean boardFull() {
@@ -182,7 +161,7 @@ public class TicTacToe
 
 
     private void updateGameWinStatisticsIfGameHasJustEnded() {
-        if (gameEnd)
+        if (isGameOver())
             mArrayPlayerWinCount[getWinningPlayerNumber()-1]++;  // player 1 or 2 == element 0 or 1
     }
 
@@ -197,13 +176,13 @@ public class TicTacToe
 
     public void resetStatistics ()
     {
-        mNumberOfGamesPlayed= gameEnd ? 0 : 1;
+        mNumberOfGamesPlayed= isGameOver() ? 0 : 1;
         Arrays.fill(mArrayPlayerWinCount, 0);
     }
 
     public int getWinningPlayerNumberIfGameOver()
     {
-        if (!gameEnd)
+        if (!isGameOver())
             throw new IllegalStateException("No winner yet; the game is still ongoing.");
         return getWinningPlayerNumber();
     }
@@ -254,9 +233,5 @@ public class TicTacToe
 
     public String getRules() {
         return "Players take turns as X and Y. Try to get three Xs or Ys in a row to win.";
-    }
-
-    public boolean isGameOver() {
-        return gameEnd;
     }
 }

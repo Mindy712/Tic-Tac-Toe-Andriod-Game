@@ -11,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.util.Pair;
 import android.view.View;
 
 import android.view.Menu;
@@ -73,6 +74,31 @@ public class MainActivity extends AppCompatActivity {
         //      check if the game is over
         // 3b. if it's not available then tell the user that was an invalid choice
         //mGame.takeTurnGame(button);
+
+        // get row and column of current clicked button
+        if (!mGame.isGameOver()) {
+            char currentPlayer = mGame.getCurrentPlayerSymbol();
+            Pair<Integer, Integer> pairRowCol = getClickedRowCol(button);
+            if (mGame.canTakeTurn(pairRowCol)) {
+                button.setText(Character.toString(currentPlayer));
+            }
+            else {
+                //invalid move
+            }
+        }
+        else {
+            //message that game is over
+        }
+    }
+
+    private Pair<Integer, Integer> getClickedRowCol(Button button) {
+        for (int row = 0; row < mBtnBoard.length; row++) {
+            for (int col = 0; col < mBtnBoard[row].length; col++) {
+                if (button == mBtnBoard[row][col])
+                    return new Pair<>(row,col);
+            }
+        }
+        return new Pair<>(-1,-1);
     }
 
     @Override
@@ -131,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         mTvStatusBarCurrentPlayer.setText(
                 String.format(Locale.getDefault(), "%s: %s",
                         getString(R.string.current_player),
-                        mGame.getCurrentPlayer()));
+                        mGame.getCurrentPlayerSymbol()));
     }
 
     private void showAbout() {

@@ -22,7 +22,7 @@ import java.util.Locale;
 
 import static com.example.tic_tac_toe.lib.Utils.showInfoDialog;
 
-public class MainActivity<pirvate> extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private Snackbar mSnackBar;
     private TicTacToe mGame;
     private TextView mTvStatusBarCurrentPlayer;
@@ -43,6 +43,12 @@ public class MainActivity<pirvate> extends AppCompatActivity {
         mTvStatusBarCurrentPlayer = findViewById(R.id.tv_status_current_player);
         setupFAB();
 
+        mBtnBoard = new Button[][]
+                {
+                        {findViewById(R.id.button_00), findViewById(R.id.button_01), findViewById(R.id.button_02)},
+                        {findViewById(R.id.button_10), findViewById(R.id.button_11), findViewById(R.id.button_12)},
+                        {findViewById(R.id.button_20), findViewById(R.id.button_21), findViewById(R.id.button_22)}
+                };
         mSnackBar =
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.welcome),
                         Snackbar.LENGTH_LONG);
@@ -56,7 +62,17 @@ public class MainActivity<pirvate> extends AppCompatActivity {
     }
     public void takeTurn(View view){
         Button button = (Button) view;
-        mGame.takeTurnGame(button);
+        // get from the model:
+        // see if the game is active (not over) - if yes, tell user game already ended; else...
+        // assuming the game is active, take the turn
+        // 1. get current player --> for text to set on button and if game will end now
+        // 2. query the model if the space x,y is available
+        // 3a. if it is then tell model to take turn with space x,y
+        //     --> model will update char array and current player
+        //     if the turn was successful then
+        //      check if the game is over
+        // 3b. if it's not available then tell the user that was an invalid choice
+        //mGame.takeTurnGame(button);
     }
 
     @Override

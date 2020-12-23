@@ -26,6 +26,7 @@ public class MainActivity<pirvate> extends AppCompatActivity {
     private Snackbar mSnackBar;
     private TicTacToe mGame;
     private TextView mTvStatusBarCurrentPlayer;
+    private Button[][] mBtnBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,12 @@ public class MainActivity<pirvate> extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mBtnBoard = new Button[][]
+                {
+                        {findViewById(R.id.button_00), findViewById(R.id.button_01), findViewById(R.id.button_02)},
+                        {findViewById(R.id.button_10), findViewById(R.id.button_11), findViewById(R.id.button_12)},
+                        {findViewById(R.id.button_20), findViewById(R.id.button_21), findViewById(R.id.button_22)}
+                };
         mTvStatusBarCurrentPlayer = findViewById(R.id.tv_status_current_player);
         setupFAB();
 
@@ -44,12 +51,12 @@ public class MainActivity<pirvate> extends AppCompatActivity {
     }
 
     private void startFirstGame() {
-        mGame = new TicTacToe();
+        mGame = new TicTacToe(mBtnBoard);
         updateUI();
     }
     public void takeTurn(View view){
-        Button button = (Button) findViewById(view.getId());
-        mGame.takeTurnGame(button, view);
+        Button button = (Button) view;
+        mGame.takeTurnGame(button);
     }
 
     @Override
@@ -108,7 +115,7 @@ public class MainActivity<pirvate> extends AppCompatActivity {
         mTvStatusBarCurrentPlayer.setText(
                 String.format(Locale.getDefault(), "%s: %s",
                         getString(R.string.current_player),
-                        "X"));
+                        mGame.getCurrentPlayer()));
     }
 
     private void showAbout() {

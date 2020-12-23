@@ -1,5 +1,6 @@
 package com.example.tic_tac_toe.models;
 
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 
@@ -11,23 +12,32 @@ import java.util.Arrays;
 public class TicTacToe
 {
     private char[][] board = new char[3][3];
+    private Button[][] mBtnBoard;
+
     private boolean player;
     private boolean gameEnd = false;
     private int mNumberOfGamesPlayed = 0;
     private final int[] mArrayPlayerWinCount;
 
-    //TODO: Saved state
-    public TicTacToe(Button[][] state)
-    {
-        //TODO: pass in old array
-        mArrayPlayerWinCount = new int[2];
-    }
+//    //TODO: Saved state
+//    public TicTacToe(Button[][] state)
+//    {
+//        //TODO: pass in old array
+//        mArrayPlayerWinCount = new int[2];
+//    }
+//
+//
+//    public TicTacToe()
+//    {
+//        mArrayPlayerWinCount = new int[2];
+//        startGame();
+//    }
 
-
-    public TicTacToe()
+    public TicTacToe(Button[][] btnBoard)
     {
+        mBtnBoard = btnBoard;
         mArrayPlayerWinCount = new int[2];
-        startGame();
+        //startGame(); // makes the button click "freeze"
     }
 
     public void startGame()
@@ -41,10 +51,59 @@ public class TicTacToe
         }
     }
 
-    public void takeTurnGame (Button button, View view)
+//    public void takeTurnGame (Button button, View view)
+//    {
+//        String buttonID = button.getResources().getResourceEntryName(button.getId());
+//        char buttonIDArray[] = buttonID.toCharArray();
+//        while(!gameEnd) {
+//            char symbol;
+//            if(player) {
+//                symbol = 'X';
+//            } else {
+//                symbol = 'O';
+//            }
+//
+//            //TODO:get user's move in terms of row and col
+//            int row = buttonIDArray[buttonIDArray.length - 2]; //place holder
+//            int col = buttonIDArray[buttonIDArray.length - 1]; //place holder
+////            while (!board[row][col].getText().equals("")) {
+////                //TODO:get user's move in terms of row and col
+////                row = 0; //place holder
+////                col = 0; //place holder
+////            }
+//            Button player_button = (Button) view.findViewById(R.id.(buttonID));
+//            if(button.getText().equals("")) {
+//                button.setText(symbol);
+//                board[row][col] = symbol;
+//            }
+//            else{
+//                System.out.println("don't set");
+//            }
+//            //check if player won
+//            if(playerWon(symbol)) {
+//                //TODO:message of winner
+//                gameEnd = true;
+//            } else if (boardFull()){
+//                //TODO:message of cats game
+//                gameEnd = true;
+//            } else {
+//                player = !player;
+//            }
+//
+//        }
+//    }
+
+    public void takeTurnGame (Button button)
     {
-        String buttonID = button.getResources().getResourceEntryName(button.getId());
-        char buttonIDArray[] = buttonID.toCharArray();
+        // get row and column of current clicked button
+        Pair<Integer, Integer> pairRowCol = getClickedRowCol(button);
+
+        int row = pairRowCol.first;
+        int col = pairRowCol.second;
+
+        if (row==-1 || col==-1)
+            throw new IllegalArgumentException("Unknown Space Clicked");
+
         while(!gameEnd) {
             char symbol;
             if(player) {
@@ -53,34 +112,40 @@ public class TicTacToe
                 symbol = 'O';
             }
 
-            //TODO:get user's move in terms of row and col
-            int row = buttonIDArray[buttonIDArray.length - 2]; //place holder
-            int col = buttonIDArray[buttonIDArray.length - 1]; //place holder
-//            while (!board[row][col].getText().equals("")) {
-//                //TODO:get user's move in terms of row and col
-//                row = 0; //place holder
-//                col = 0; //place holder
-//            }
-            Button player_button = (Button) view.findViewById(R.id.(buttonID));
             if(button.getText().equals("")) {
-                button.setText(symbol);
+                button.setText(Character.toString(symbol));
                 board[row][col] = symbol;
+
+                //check if player won - only on valid click
+                if(playerWon(symbol)) {
+                //TODO:message of winner
+                    gameEnd = true;
+                } else if (boardFull()){
+                //TODO:message of cats game
+                    gameEnd = true;
+                } else {
+                    player = !player;
+                }
+
             }
             else{
                 System.out.println("don't set");
             }
-            //check if player won
-            if(playerWon(symbol)) {
-                //TODO:message of winner
-                gameEnd = true;
-            } else if (boardFull()){
-                //TODO:message of cats game
-                gameEnd = true;
-            } else {
-                player = !player;
-            }
-
         }
+    }
+
+    private Pair<Integer, Integer> getClickedRowCol(Button button) {
+        for (int row = 0; row < mBtnBoard.length; row++) {
+            for (int col = 0; col < mBtnBoard[row].length; col++) {
+                if (button == mBtnBoard[row][col])
+                    return new Pair<>(row,col);
+            }
+        }
+        return new Pair<>(-1,-1);
+    }
+
+    public String getCurrentPlayer() {
+        return player ? "X" : "O";
     }
 
     private boolean boardFull() {

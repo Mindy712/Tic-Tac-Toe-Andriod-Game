@@ -15,13 +15,14 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.Locale;
 
 import static com.example.tic_tac_toe.lib.Utils.showInfoDialog;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity<pirvate> extends AppCompatActivity {
     private Snackbar mSnackBar;
     private TicTacToe mGame;
     private TextView mTvStatusBarCurrentPlayer;
@@ -45,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     private void startFirstGame() {
         mGame = new TicTacToe();
         updateUI();
+    }
+    public void takeTurn(View view){
+        Button button = (Button) findViewById(view.getId());
+        mGame.takeTurnGame(button, view);
     }
 
     @Override

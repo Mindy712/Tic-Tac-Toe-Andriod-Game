@@ -1,14 +1,16 @@
 package com.example.tic_tac_toe.models;
 
+import android.view.View;
 import android.widget.Button;
 
+import com.example.tic_tac_toe.R;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
 
 public class TicTacToe
 {
-    private Button[][] board = new Button[3][3];
+    private char[][] board = new char[3][3];
     private boolean player;
     private boolean gameEnd = false;
     private int mNumberOfGamesPlayed = 0;
@@ -25,17 +27,24 @@ public class TicTacToe
     public TicTacToe()
     {
         mArrayPlayerWinCount = new int[2];
-        startGame ();
+        startGame();
     }
 
-    public void startGame ()
+    public void startGame()
     {
         player = true;
         mNumberOfGamesPlayed++;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                board[i][j] = ' ';
+            }
+        }
     }
 
-    public void takeTurn (Button button)
+    public void takeTurnGame (Button button, View view)
     {
+        String buttonID = button.getResources().getResourceEntryName(button.getId());
+        char buttonIDArray[] = buttonID.toCharArray();
         while(!gameEnd) {
             char symbol;
             if(player) {
@@ -45,15 +54,21 @@ public class TicTacToe
             }
 
             //TODO:get user's move in terms of row and col
-            int row = 0; //place holder
-            int col = 0; //place holder
-            while (!board[row][col].getText().equals("")) {
-                //TODO:get user's move in terms of row and col
-                row = 0; //place holder
-                col = 0; //place holder
+            int row = buttonIDArray[buttonIDArray.length - 2]; //place holder
+            int col = buttonIDArray[buttonIDArray.length - 1]; //place holder
+//            while (!board[row][col].getText().equals("")) {
+//                //TODO:get user's move in terms of row and col
+//                row = 0; //place holder
+//                col = 0; //place holder
+//            }
+            Button player_button = (Button) view.findViewById(R.id.(buttonID));
+            if(button.getText().equals("")) {
+                button.setText(symbol);
+                board[row][col] = symbol;
             }
-            board[row][col].setText(symbol);
-
+            else{
+                System.out.println("don't set");
+            }
             //check if player won
             if(playerWon(symbol)) {
                 //TODO:message of winner
@@ -71,7 +86,7 @@ public class TicTacToe
     private boolean boardFull() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if(board[i][j].getText().equals("")) {
+                if(board[i][j] == ' ') {
                     return false;
                 }
             }
@@ -81,19 +96,19 @@ public class TicTacToe
 
     private boolean playerWon(char symbol) {
         for(int i = 0; i < 3; i++) {
-            if(board[i][0].getText().equals(symbol) && board[i][1].getText().equals(symbol) && board[i][2].getText().equals(symbol)) {
+            if(board[i][0] == symbol && board[i][1] == symbol  && board[i][2] == symbol ) {
                 return true;
             }
         }
         for(int j = 0; j < 3; j++) {
-            if(board[0][j].getText().equals(symbol) && board[1][j].getText().equals(symbol) && board[2][j].getText().equals(symbol)) {
+            if(board[0][j] == symbol  && board[1][j] == symbol  && board[2][j] == symbol ) {
                 return true;
             }
         }
-        if(board[0][0].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[2][2].getText().equals(symbol)) {
+        if(board[0][0] == symbol  && board[1][1] == symbol  && board[2][2] == symbol ) {
             return true;
         }
-        if(board[2][0].getText().equals(symbol) && board[1][1].getText().equals(symbol) && board[0][2].getText().equals(symbol)) {
+        if(board[2][0] == symbol  && board[1][1] == symbol  && board[0][2] == symbol ) {
             return true;
         }
 
@@ -170,4 +185,13 @@ public class TicTacToe
     public String getJSONFromCurrentGame()
     {
         return getJSONFromGame(this);
-    }}
+    }
+
+    public String getRules() {
+        return "Players take turns as X and Y. Try to get three Xs or Ys in a row to win.";
+    }
+
+    public boolean isGameOver() {
+        return gameEnd;
+    }
+}

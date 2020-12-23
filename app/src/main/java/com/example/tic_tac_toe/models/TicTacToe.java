@@ -15,7 +15,7 @@ public class TicTacToe
     private char[][] board = new char[3][3];
     private Button[][] mBtnBoard;
     private boolean player;
-    private boolean gameEnd = false;
+    private boolean gameEnd = false; // replace with isGameOver
     private int mNumberOfGamesPlayed = 0;
     private final int[] mArrayPlayerWinCount;
 

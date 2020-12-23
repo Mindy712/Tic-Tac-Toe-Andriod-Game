@@ -56,7 +56,17 @@ public class MainActivity extends AppCompatActivity {
     }
     public void takeTurn(View view){
         Button button = (Button) view;
-        mGame.takeTurnGame(button);
+        // get from the model:
+        // see if the game is active (not over) - if yes, tell user game already ended; else...
+        // assuming the game is active, take the turn
+        // 1. get current player --> for text to set on button and if game will end now
+        // 2. query the model if the space x,y is available
+        // 3a. if it is then tell model to take turn with space x,y
+        //     --> model will update char array and current player
+        //     if the turn was successful then
+        //      check if the game is over
+        // 3b. if it's not available then tell the user that was an invalid choice
+        //mGame.takeTurnGame(button);
     }
 
     @Override

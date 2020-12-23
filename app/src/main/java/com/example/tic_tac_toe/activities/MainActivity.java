@@ -22,10 +22,11 @@ import java.util.Locale;
 
 import static com.example.tic_tac_toe.lib.Utils.showInfoDialog;
 
-public class MainActivity<pirvate> extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private Snackbar mSnackBar;
     private TicTacToe mGame;
     private TextView mTvStatusBarCurrentPlayer;
+    private Button[][] mBtnBoard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,12 @@ public class MainActivity<pirvate> extends AppCompatActivity {
         mTvStatusBarCurrentPlayer = findViewById(R.id.tv_status_current_player);
         setupFAB();
 
+        mBtnBoard = new Button[][]
+                {
+                        {findViewById(R.id.button_00), findViewById(R.id.button_01), findViewById(R.id.button_02)},
+                        {findViewById(R.id.button_10), findViewById(R.id.button_11), findViewById(R.id.button_12)},
+                        {findViewById(R.id.button_20), findViewById(R.id.button_21), findViewById(R.id.button_22)}
+                };
         mSnackBar =
                 Snackbar.make(findViewById(android.R.id.content), getString(R.string.welcome),
                         Snackbar.LENGTH_LONG);
@@ -44,12 +51,12 @@ public class MainActivity<pirvate> extends AppCompatActivity {
     }
 
     private void startFirstGame() {
-        mGame = new TicTacToe();
+        mGame = new TicTacToe(mBtnBoard);
         updateUI();
     }
     public void takeTurn(View view){
-        Button button = (Button) findViewById(view.getId());
-        mGame.takeTurnGame(button, view);
+        Button button = (Button) view;
+        mGame.takeTurnGame(button);
     }
 
     @Override

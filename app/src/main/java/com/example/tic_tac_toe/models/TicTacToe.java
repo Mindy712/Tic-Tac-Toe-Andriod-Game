@@ -99,7 +99,7 @@ public class TicTacToe
         if (row==-1 || col==-1)
             throw new IllegalArgumentException("Unknown Space Clicked");
 
-        if(board[row][col] != 'X' || board[row][col] != 'O') {
+        if(board[row][col] != 'X' && board[row][col] != 'O') {
             board[row][col] = getCurrentPlayerSymbol();
 
             if (!isGameOver()) {
@@ -127,7 +127,7 @@ public class TicTacToe
         return false;
     }
 
-    private boolean boardFull() {
+    public boolean boardFull() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if(board[i][j] == ' ') {
@@ -138,7 +138,7 @@ public class TicTacToe
         return true;
     }
 
-    private boolean playerWon(char symbol) {
+   public boolean playerWon(char symbol) {
         for(int i = 0; i < 3; i++) {
             if(board[i][0] == symbol && board[i][1] == symbol  && board[i][2] == symbol ) {
                 return true;

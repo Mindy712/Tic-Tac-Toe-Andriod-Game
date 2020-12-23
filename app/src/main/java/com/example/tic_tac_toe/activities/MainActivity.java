@@ -35,12 +35,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        mBtnBoard = new Button[][]
-                {
-                        {findViewById(R.id.button_00), findViewById(R.id.button_01), findViewById(R.id.button_02)},
-                        {findViewById(R.id.button_10), findViewById(R.id.button_11), findViewById(R.id.button_12)},
-                        {findViewById(R.id.button_20), findViewById(R.id.button_21), findViewById(R.id.button_22)}
-                };
         mTvStatusBarCurrentPlayer = findViewById(R.id.tv_status_current_player);
         setupFAB();
 
@@ -59,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void startFirstGame() {
         mGame = new TicTacToe(mBtnBoard);
+        startNextNewGame();
         updateUI();
     }
     public void takeTurn(View view){
@@ -81,6 +76,11 @@ public class MainActivity extends AppCompatActivity {
             Pair<Integer, Integer> pairRowCol = getClickedRowCol(button);
             if (mGame.canTakeTurn(pairRowCol)) {
                 button.setText(Character.toString(currentPlayer));
+                updateUI();
+                if(mGame.isGameOver()){
+                    onGameOver();
+                }
+
             }
             else {
                 //invalid move
@@ -88,7 +88,21 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             //message that game is over
+
         }
+    }
+
+    private void onGameOver() {
+        String message;
+        if (mGame.playerWon(mGame.getCurrentPlayerSymbol())) {
+            message = "Player " + mGame.getCurrentPlayerSymbol() + " wins!";
+        }
+        else {
+            message = "Cats Game!";
+        }
+        dismissSnackBarIfShown();
+        showInfoDialog(MainActivity.this, "Game Over",
+                message);
     }
 
     private Pair<Integer, Integer> getClickedRowCol(Button button) {
@@ -149,6 +163,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void startNextNewGame() {
         mGame.startGame();
+        for (Button[] buttonRow: mBtnBoard) {
+            for (Button button: buttonRow) {
+                button.setText(" ");
+            }
+
+        }
         updateUI();
     }
 

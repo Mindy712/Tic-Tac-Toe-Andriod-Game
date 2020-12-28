@@ -5,6 +5,5 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <include layout="@layout/main_include_instruction_bar" />
-    <include layout="@layout/main_include_board"/>
+   <include layout="@layout/main_include_all_content_items"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -142,13 +142,7 @@ public class TicTacToe
         }
     }
 
-    public void resetStatistics ()
-    {
-        mNumberOfGamesPlayed= isGameOver() ? 0 : 1;
-        Arrays.fill(mArrayPlayerWinCount, 0);
-    }
-
-//    public int getWinningPlayerNumberIfGameOver()
+   //    public int getWinningPlayerNumberIfGameOver()
 //    {
 //        if (!isGameOver())
 //            throw new IllegalStateException("No winner yet; the game is still ongoing.");

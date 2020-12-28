@@ -20,15 +20,15 @@
 
         <Button
             android:id="@+id/button_00"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
         <Button
             android:id="@+id/button_01"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
         <Button
             android:id="@+id/button_02"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
     </LinearLayout>
 
@@ -36,15 +36,15 @@
 
         <Button
             android:id="@+id/button_10"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
         <Button
             android:id="@+id/button_11"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
         <Button
             android:id="@+id/button_12"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
     </LinearLayout>
 
@@ -52,15 +52,15 @@
 
         <Button
             android:id="@+id/button_20"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
         <Button
             android:id="@+id/button_21"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
         <Button
             android:id="@+id/button_22"
-            style="@style/board_button_style_portrait" />
+            style="@style/board_button_style_land" />
 
     </LinearLayout>
 

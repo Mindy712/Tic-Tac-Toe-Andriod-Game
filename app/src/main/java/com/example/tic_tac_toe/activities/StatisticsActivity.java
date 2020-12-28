@@ -72,8 +72,8 @@ public class StatisticsActivity extends AppCompatActivity {
         int numberOfGamesPlayed = mCurrentGame.getNumberOfGamesPlayed();
         if (!mCurrentGame.isGameOver() && numberOfGamesPlayed > 0)
             numberOfGamesPlayed--;
-        int p1Wins = mCurrentGame.getNumberOfWinsForPlayer(1);
-        int p2Wins = mCurrentGame.getNumberOfWinsForPlayer(2);
+        int p1Wins = mCurrentGame.getNumberOfWinsForPlayer('X');
+        int p2Wins = mCurrentGame.getNumberOfWinsForPlayer('O');
         String p1WinPct = numberOfGamesPlayed  == 0 ? N_A :
                 String.format(Locale.US, FORMAT_STRING, (p1Wins/(double)numberOfGamesPlayed)*100);
         String p2WinPct = numberOfGamesPlayed == 0 ? N_A :

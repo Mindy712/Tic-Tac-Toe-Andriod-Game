@@ -49,48 +49,6 @@ public class TicTacToe
         }
     }
 
-//    public void takeTurnGame (Button button, View view)
-//    {
-//        String buttonID = button.getResources().getResourceEntryName(button.getId());
-//        char buttonIDArray[] = buttonID.toCharArray();
-//        while(!gameEnd) {
-//            char symbol;
-//            if(player) {
-//                symbol = 'X';
-//            } else {
-//                symbol = 'O';
-//            }
-//
-//            //TODO:get user's move in terms of row and col
-//            int row = buttonIDArray[buttonIDArray.length - 2]; //place holder
-//            int col = buttonIDArray[buttonIDArray.length - 1]; //place holder
-////            while (!board[row][col].getText().equals("")) {
-////                //TODO:get user's move in terms of row and col
-////                row = 0; //place holder
-////                col = 0; //place holder
-////            }
-//            Button player_button = (Button) view.findViewById(R.id.(buttonID));
-//            if(button.getText().equals("")) {
-//                button.setText(symbol);
-//                board[row][col] = symbol;
-//            }
-//            else{
-//                System.out.println("don't set");
-//            }
-//            //check if player won
-//            if(playerWon(symbol)) {
-//                //TODO:message of winner
-//                gameEnd = true;
-//            } else if (boardFull()){
-//                //TODO:message of cats game
-//                gameEnd = true;
-//            } else {
-//                player = !player;
-//            }
-//
-//        }
-//    }
-
     public boolean canTakeTurn (Pair<Integer, Integer> pairRowCol)
     {
         int row = pairRowCol.first;
@@ -118,7 +76,9 @@ public class TicTacToe
     }
 
     public boolean isGameOver() {
+
         if (playerWon(getCurrentPlayerSymbol())) {
+            updateGameWinStatisticsIfGameHasJustEnded();
             return true;
         }
         else if (boardFull()) {
@@ -161,17 +121,25 @@ public class TicTacToe
 
 
     private void updateGameWinStatisticsIfGameHasJustEnded() {
-        if (isGameOver())
-            mArrayPlayerWinCount[getWinningPlayerNumber()-1]++;  // player 1 or 2 == element 0 or 1
+//        if (isGameOver())
+        if(getWinningPlayerSymbol() == 'X') {
+            mArrayPlayerWinCount[0]++;
+        } else {
+            mArrayPlayerWinCount[1]++;
+        }
+
     }
 
 
-    public int getNumberOfWinsForPlayer (int playerNumber)
+    public int getNumberOfWinsForPlayer (char playerSymbol)
     {
-        if (playerNumber < 1 || playerNumber > 2)
-            throw new IllegalArgumentException("Player number must be between 1 and "
-                    + 2 + ".");
-        return mArrayPlayerWinCount[playerNumber-1];
+        if (playerSymbol != 'X' || playerSymbol != 'O')
+            throw new IllegalArgumentException("Player number must be X or O.");
+        if(playerSymbol == 'X') {
+            return mArrayPlayerWinCount[0];
+        } else {
+            return mArrayPlayerWinCount[1];
+        }
     }
 
     public void resetStatistics ()
@@ -180,21 +148,18 @@ public class TicTacToe
         Arrays.fill(mArrayPlayerWinCount, 0);
     }
 
-    public int getWinningPlayerNumberIfGameOver()
-    {
-        if (!isGameOver())
-            throw new IllegalStateException("No winner yet; the game is still ongoing.");
-        return getWinningPlayerNumber();
+//    public int getWinningPlayerNumberIfGameOver()
+//    {
+//        if (!isGameOver())
+//            throw new IllegalStateException("No winner yet; the game is still ongoing.");
+//        return getWinningPlayerNumber();
+//    }
+
+    private char getWinningPlayerSymbol() {
+        return (player) ? 'X' : 'O';
     }
 
-    private int getWinningPlayerNumber() {
-        return (player) ? 1 : 2;
-    }
-
-    public int getCurrentPlayerNumber ()
-    {
-        return player ? 1 : 2;
-    }
+//    public int getCurrentPlayerNumber () { return player ? 1 : 2; }
 
     public int getNumberOfGamesPlayed ()
     {

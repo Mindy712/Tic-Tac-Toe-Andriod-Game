@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startFirstGame() {
-        mGame = new TicTacToe(mBtnBoard);
+        mGame = new TicTacToe();
         startNextNewGame();
         updateUI();
     }

@@ -10,7 +10,6 @@ import java.util.Arrays;
 public class TicTacToe
 {
     private char[][] board = new char[3][3];
-    private Button[][] mBtnBoard;
 
     private boolean player;
 //    private boolean gameEnd = false;
@@ -31,9 +30,8 @@ public class TicTacToe
 //        startGame();
 //    }
 
-    public TicTacToe(Button[][] btnBoard)
+    public TicTacToe()
     {
-        mBtnBoard = btnBoard;
         mArrayPlayerWinCount = new int[2];
         //startGame(); // makes the button click "freeze"
     }
@@ -133,7 +131,7 @@ public class TicTacToe
 
     public int getNumberOfWinsForPlayer (char playerSymbol)
     {
-        if (playerSymbol != 'X' || playerSymbol != 'O')
+        if (playerSymbol != 'X' && playerSymbol != 'O')
             throw new IllegalArgumentException("Player number must be X or O.");
         if(playerSymbol == 'X') {
             return mArrayPlayerWinCount[0];

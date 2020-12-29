@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         dismissSnackBarIfShown();
         showInfoDialog(MainActivity.this, "Game Over",
                 message);
+        mGame.updateGameWinStatisticsIfGameHasJustEnded();
     }
 
     private Pair<Integer, Integer> getClickedRowCol(Button button) {

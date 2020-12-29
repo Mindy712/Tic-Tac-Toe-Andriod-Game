@@ -76,7 +76,6 @@ public class TicTacToe
     public boolean isGameOver() {
 
         if (playerWon(getCurrentPlayerSymbol())) {
-            updateGameWinStatisticsIfGameHasJustEnded();
             return true;
         }
         else if (boardFull()) {
@@ -118,14 +117,14 @@ public class TicTacToe
     }
 
 
-    private void updateGameWinStatisticsIfGameHasJustEnded() {
-//        if (isGameOver())
-        if(getWinningPlayerSymbol() == 'X') {
-            mArrayPlayerWinCount[0]++;
-        } else {
-            mArrayPlayerWinCount[1]++;
+    public void updateGameWinStatisticsIfGameHasJustEnded() {
+        if (playerWon(getCurrentPlayerSymbol())) {
+            if (getWinningPlayerSymbol() == 'X') {
+                mArrayPlayerWinCount[0]++;
+            } else {
+                mArrayPlayerWinCount[1]++;
+            }
         }
-
     }
 
 

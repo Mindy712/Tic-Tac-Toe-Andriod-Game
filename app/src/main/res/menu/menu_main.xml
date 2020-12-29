@@ -8,11 +8,19 @@
         android:title="@string/new_game"
         app:showAsAction="ifRoom|withText" />
     <item
+        android:id="@+id/undo"
+        android:icon="@drawable/ic_baseline_undo_24"
+        android:title="Undo"
+        app:showAsAction="ifRoom|withText"/>
+    <item
         android:id="@+id/action_statistics"
         android:icon="@drawable/ic_outline_list_24"
         android:title="@string/view_statistics"
         app:showAsAction="ifRoom|withText" />
-
+    <item
+        android:id="@+id/action_reset_stats"
+        android:title="@string/reset_statistics"
+        app:showAsAction="never"/>
     <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"

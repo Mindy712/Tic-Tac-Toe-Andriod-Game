@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private TicTacToe mGame;
     private TextView mTvStatusBarCurrentPlayer;
     private Button[][] mBtnBoard;
+    private Button lastButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,26 +57,19 @@ public class MainActivity extends AppCompatActivity {
         startNextNewGame();
         updateUI();
     }
+
     public void takeTurn(View view){
         Button button = (Button) view;
-        // get from the model:
-        // see if the game is active (not over) - if yes, tell user game already ended; else...
-        // assuming the game is active, take the turn
-        // 1. get current player --> for text to set on button and if game will end now
-        // 2. query the model if the space x,y is available
-        // 3a. if it is then tell model to take turn with space x,y
-        //     --> model will update char array and current player
-        //     if the turn was successful then
-        //      check if the game is over
-        // 3b. if it's not available then tell the user that was an invalid choice
-        //mGame.takeTurnGame(button);
 
         // get row and column of current clicked button
         if (!mGame.isGameOver()) {
             char currentPlayer = mGame.getCurrentPlayerSymbol();
             Pair<Integer, Integer> pairRowCol = getClickedRowCol(button);
-            if (mGame.canTakeTurn(pairRowCol)) {
+            int row = pairRowCol.first;
+            int col = pairRowCol.second;
+            if (mGame.attemptTakeTurn(row, col)) {
                 button.setText(Character.toString(currentPlayer));
+                lastButton = button;
                 updateUI();
                 if(mGame.isGameOver()){
                     onGameOver();
@@ -87,8 +81,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         else {
-            //message that game is over
-
+            //game is over
         }
     }
 
@@ -122,8 +115,14 @@ public class MainActivity extends AppCompatActivity {
         if (itemId == R.id.action_new_game) {
             startNextNewGame();
             return true;
+        } else if (itemId == R.id.undo) {
+            undoLastMove();
+            return true;
         } else if (itemId == R.id.action_statistics) {
             showStatistics();
+            return true;
+        } else if (itemId == R.id.action_reset_stats) {
+            resetStatistics();
             return true;
         } else if (itemId == R.id.action_settings) {
             showSettings();
@@ -159,6 +158,23 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), StatisticsActivity.class);
         intent.putExtra("GAME", mGame.getJSONFromCurrentGame());
         startActivity(intent);
+    }
+
+    private void undoLastMove() {
+        if (lastButton != null) {
+            Pair<Integer, Integer> pairRowCol = getClickedRowCol(lastButton);
+            int row = pairRowCol.first;
+            int col = pairRowCol.second;
+            mGame.undoLastMove(row, col);
+            lastButton.setText("");
+            updateUI();
+        }
+    }
+
+    private void resetStatistics ()
+    {
+        mGame.resetNumberOfGamesPlayed();
+        mGame.resetPlayerWins();
     }
 
 

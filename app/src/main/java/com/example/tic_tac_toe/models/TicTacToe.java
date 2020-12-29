@@ -1,10 +1,6 @@
 package com.example.tic_tac_toe.models;
 
-import android.util.Pair;
-import android.widget.Button;
-
 import com.google.gson.Gson;
-
 import java.util.Arrays;
 
 public class TicTacToe
@@ -12,28 +8,12 @@ public class TicTacToe
     private char[][] board = new char[3][3];
 
     private boolean player;
-//    private boolean gameEnd = false;
     private int mNumberOfGamesPlayed = 0;
     private final int[] mArrayPlayerWinCount;
-
-//    //TODO: Saved state
-//    public TicTacToe(Button[][] state)
-//    {
-//        //TODO: pass in old array
-//        mArrayPlayerWinCount = new int[2];
-//    }
-//
-//
-//    public TicTacToe()
-//    {
-//        mArrayPlayerWinCount = new int[2];
-//        startGame();
-//    }
 
     public TicTacToe()
     {
         mArrayPlayerWinCount = new int[2];
-        //startGame(); // makes the button click "freeze"
     }
 
     public void startGame()
@@ -47,12 +27,9 @@ public class TicTacToe
         }
     }
 
-    public boolean canTakeTurn (Pair<Integer, Integer> pairRowCol)
+    public boolean attemptTakeTurn(int row, int col)
     {
-        int row = pairRowCol.first;
-        int col = pairRowCol.second;
-
-        if (row==-1 || col==-1)
+        if (row < 0 || col < 1 || row >= board.length || col >= board[0].length)
             throw new IllegalArgumentException("Unknown Space Clicked");
 
         if(board[row][col] != 'X' && board[row][col] != 'O') {
@@ -63,7 +40,7 @@ public class TicTacToe
             }
             return true;
         }
-        else{
+        else {
             System.out.println("don't set");
         }
         return false;
@@ -139,23 +116,26 @@ public class TicTacToe
         }
     }
 
-   //    public int getWinningPlayerNumberIfGameOver()
-//    {
-//        if (!isGameOver())
-//            throw new IllegalStateException("No winner yet; the game is still ongoing.");
-//        return getWinningPlayerNumber();
-//    }
+    public void undoLastMove(int row, int col) {
+        if (row < 0 || col < 1 || row >= board.length || col >= board[0].length)
+            throw new IllegalArgumentException("Unknown Space Clicked");
+
+        player = !player;
+        board[row][col] = ' ';
+    }
 
     private char getWinningPlayerSymbol() {
         return (player) ? 'X' : 'O';
     }
 
-//    public int getCurrentPlayerNumber () { return player ? 1 : 2; }
-
     public int getNumberOfGamesPlayed ()
     {
         return mNumberOfGamesPlayed;
     }
+
+    public void resetNumberOfGamesPlayed() { mNumberOfGamesPlayed = 0; }
+
+    public void resetPlayerWins() { Arrays.fill(mArrayPlayerWinCount, 0); }
 
     /**
      * Reverses the game object's serialization as a String

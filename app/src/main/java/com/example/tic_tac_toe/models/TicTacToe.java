@@ -37,7 +37,7 @@ public class TicTacToe
 
     public boolean attemptTakeTurn(int row, int col)
     {
-        if (row < 0 || col < 0 || row >= board.length || col >= board[0].length)
+        if (row < 0 || col < 0 || row >= board.length || col >= board[row].length)
             throw new IllegalArgumentException("Unknown Space Clicked");
 
         if(board[row][col] != 'X' && board[row][col] != 'O') {
@@ -125,7 +125,7 @@ public class TicTacToe
     }
 
     public void undoLastMove(int row, int col) {
-        if (row < 0 || col < 1 || row >= board.length || col >= board[0].length)
+        if (row < 0 || col < 0 || row >= board.length || col >= board[row].length)
             throw new IllegalArgumentException("Unknown Space Clicked");
 
         player = !player;

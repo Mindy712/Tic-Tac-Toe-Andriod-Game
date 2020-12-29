@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void displaySavedState(TicTacToe mGame) {
         char[][] board = mGame.getBoard();
-        for(int i=0; i < 3; i++ ) {
-            for(int j=0; j < 3; j++) {
+        for(int i=0; i < board.length; i++ ) {
+            for(int j=0; j < board[i].length; j++) {
                 if(board[i][j] != ' ') {
                     mBtnBoard[i][j].setText(Character.toString(board[i][j]));
                 }

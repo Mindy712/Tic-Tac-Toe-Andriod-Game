@@ -1,6 +1,7 @@
 package com.example.tic_tac_toe.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.example.tic_tac_toe.R;
@@ -8,6 +9,7 @@ import com.example.tic_tac_toe.models.TicTacToe;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -21,14 +23,87 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
+import static androidx.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.example.tic_tac_toe.lib.Utils.showInfoDialog;
+import static com.example.tic_tac_toe.models.TicTacToe.getGameFromJSON;
+import static com.example.tic_tac_toe.models.TicTacToe.getJSONFromGame;
 
 public class MainActivity extends AppCompatActivity {
     private Snackbar mSnackBar;
     private TicTacToe mGame;
     private TextView mTvStatusBarCurrentPlayer;
     private Button[][] mBtnBoard;
+    private boolean mUseAutoSave;
+    private final String mKEY_GAME = "GAME";
+    private String mKEY_AUTO_SAVE;
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveOrDeleteGameInSharedPrefs();
+    }
+
+    private void saveOrDeleteGameInSharedPrefs() {
+        SharedPreferences defaultSharedPreferences = getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+
+        if(mUseAutoSave) {
+            editor.putString(mKEY_GAME, mGame.getJSONFromCurrentGame());
+        }
+        else {
+            editor.remove(mKEY_GAME);
+        }
+        editor.apply();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        restoreFromPreferences_SavedGameIfAutoSaveWasSetOn();
+        restoreOrSetFromPreferences_AllAppAndGameSettings();
+    }
+
+    private void restoreFromPreferences_SavedGameIfAutoSaveWasSetOn() {
+        SharedPreferences defaultSharedPreferences = getDefaultSharedPreferences(this);
+        if (defaultSharedPreferences.getBoolean(mKEY_AUTO_SAVE,true)) {
+            String gameString = defaultSharedPreferences.getString(mKEY_GAME, null);
+            if (gameString!=null) {
+                mGame = getGameFromJSON(gameString);
+                displaySavedState(mGame);
+                updateUI();
+            }
+        }
+    }
+
+    private void displaySavedState(TicTacToe mGame) {
+        char[][] board = mGame.getBoard();
+        for(int i=0; i < 3; i++ ) {
+            for(int j=0; j < 3; j++) {
+                if(board[i][j] != ' ') {
+                    mBtnBoard[i][j].setText(Character.toString(board[i][j]));
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(mKEY_GAME, getJSONFromGame(mGame));
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mGame = getGameFromJSON(savedInstanceState.getString(mKEY_GAME));
+        updateUI();
+    }
+
+    private void restoreOrSetFromPreferences_AllAppAndGameSettings() {
+        SharedPreferences sp = getDefaultSharedPreferences(this);
+        mUseAutoSave = sp.getBoolean(mKEY_AUTO_SAVE, true);
+    }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         mTvStatusBarCurrentPlayer = findViewById(R.id.tv_status_current_player);
         setupFAB();
+        mKEY_AUTO_SAVE = getString(R.string.auto_save_key);
 
         mBtnBoard = new Button[][]
                 {

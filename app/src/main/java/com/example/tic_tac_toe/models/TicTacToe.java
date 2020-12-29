@@ -9,6 +9,14 @@ import java.util.Arrays;
 
 public class TicTacToe
 {
+    public char[][] getBoard() {
+        return board;
+    }
+
+    public boolean isPlayer() {
+        return player;
+    }
+
     private char[][] board = new char[3][3];
 
     private boolean player;
